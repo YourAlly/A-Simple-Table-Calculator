@@ -29,7 +29,7 @@ function table_change() {
     head.innerHTML = '';
     for (var i = 0; i < cols; i++) {
         var select = document.createElement("select");
-        select.className = 'select-area';
+        select.className = `select-area col-${i + 1}`;
         for (var j = 0; j < column_values_length; j++) {
             var item = document.createElement('option');
             item.value = COLUMN_VALUES[j];
