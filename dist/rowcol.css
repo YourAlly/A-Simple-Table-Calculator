@@ -1,0 +1,31 @@
+.haha {
+  color: blue;
+}
+
+#input-table {
+  display: table;
+}
+
+.table-header {
+  display: table-header-group;
+}
+
+.table-header .tr {
+  display: table-row;
+}
+
+.table-header .tr .td {
+  display: table-cell;
+}
+
+.table-body {
+  display: table-row-group;
+}
+
+.table-body .tr {
+  display: table-row;
+}
+
+.table-body .tr .td {
+  display: table-cell;
+}
