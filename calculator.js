@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.innerHTML = i;
             selector.append(item);
         }
-        selector.onchange = table_change();
+        selector.onchange = table_change;
     })
 
 })
@@ -23,9 +23,9 @@ function table_change() {
     const rows = parseInt(document.querySelector('#rows').value);
     const cols = parseInt(document.querySelector('#cols').value);
     
-    var head = document.querySelector('#table-header')
-    head.innerHTML = '';
     // Head selectors
+    var head = document.querySelector('#table-header');
+    head.innerHTML = '';
     for (var i = 0; i < cols; i++){
         var select = document.createElement("select");
         select.dataset.column = 1;
