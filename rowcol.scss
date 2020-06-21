@@ -1,26 +1,31 @@
 #input-table {
     display: table;
-}
 
-#table-header {
-    display: table-header-group;
-
-    .select-area {
-        width: 15%;
-        margin-left: 0px;
-        margin-right: 18px;
-        margin-bottom: 5px;
+    #submit {
+        float:right;
     }
 
-}
+    #table-header {
+        display: table-header-group;
 
-#table-body {
-    .input-area {
-        width: 14%;
-        margin-left: 0px;
-        margin-right: 20px;
-        margin-top: 0px;
-        margin-bottom: 5px;
+        .select-area {
+            width: 15%;
+            margin-left: 0px;
+            margin-right: 18px;
+            margin-bottom: 5px;
+        }
+
     }
 
+    #table-body {
+        .input-area {
+            width: 14%;
+            margin-left: 0px;
+            margin-right: 20px;
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+    }
 }
+

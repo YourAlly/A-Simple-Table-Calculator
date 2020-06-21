@@ -53,7 +53,6 @@ function table_change() {
             row.append(field);
         }
         body.append(row);
-        body.append(document.createElement('br'))
     }
 
 }
