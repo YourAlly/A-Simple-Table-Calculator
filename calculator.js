@@ -11,32 +11,31 @@ document.addEventListener('DOMContentLoaded', () => {
             item.innerHTML = i;
             selector.append(item);
         }
-        selector.onchange = table_change(selector);
+        selector.onchange = table_change();
     })
 
 })
 
 
-function table_change(selector) {
+function table_change() {
     var column_values_length = COLUMN_VALUES.length;
-
+    
     const rows = parseInt(document.querySelector('#rows').value);
     const cols = parseInt(document.querySelector('#cols').value);
-    if (selector.id == 'rows') {
-        var head = document.querySelector('#table-header')
-        head.innerHTML = '';
-        // Head selectors
-        for (var i = 0; i < cols; i++) {
-            var select = document.createElement("select");
-            select.dataset.column = 1;
-            for (var j = 0; j < column_values_length; j++) {
-                var item = document.createElement('option');
-                item.value = COLUMN_VALUES[j];
-                item.innerHTML = COLUMN_VALUES[j];
+    
+    var head = document.querySelector('#table-header')
+    head.innerHTML = '';
+    // Head selectors
+    for (var i = 0; i < cols; i++){
+        var select = document.createElement("select");
+        select.dataset.column = 1;
+        for (var j = 0; j < column_values_length; j++){
+            var item = document.createElement('option');
+            item.value = COLUMN_VALUES[j];
+            item.innerHTML = COLUMN_VALUES[j];
 
-                select.append(item);
-            }
-            head.append(select)
+            select.append(item);
         }
+        head.append(select)
     }
 }
