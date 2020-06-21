@@ -13,9 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         selector.onchange = table_change;
     })
-
+    
+    // Creates Table Once
+    table_change();
 })
-
 
 function table_change() {
     var column_values_length = COLUMN_VALUES.length;
