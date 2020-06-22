@@ -32,9 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Sets form's onsubmit value to a function
-    document.querySelector('#form').onsubmit = () => {
+    document.querySelector('#submit').onclick = () => {
         submit_form();
-        return false;
     };
 
     // Creates Table Once
