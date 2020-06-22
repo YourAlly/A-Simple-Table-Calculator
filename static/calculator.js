@@ -104,11 +104,15 @@ function submit_form(){
 
 function print_answer(data){
     if(data.Process && data.Burst_Time){
-        
+        // TODO
 
     }
     else(
-        console.log('ERROR: No "Process" or "Burst_Time" inputs')
+        console.log('ERROR: No "Process" or "Burst_Time" inputs');
     )
 
+}
+
+function calculate(data){
+    // TODO
 }

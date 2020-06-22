@@ -21,9 +21,5 @@ def submit():
             return Response(status=400)
         columns_values[request.form.get(f'col-header-{i + 1}')] = request.form.getlist(f'col-{i + 1}')
     print(columns_values)
+    
     return jsonify(columns_values)
-
-
-@app.route("/error")
-def error():
-    return "ERROR"
