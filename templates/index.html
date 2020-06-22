@@ -4,21 +4,22 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}">
     <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>
-        OS Scheduling Calculator
+        Scheduling Calculator
     </title>
 </head>
 
 <body>
     <form id="form">
         <label for="rows">Rows</label>
-        <select name="rows" id="rows" class="sizeSelector" data-min="2" data-max="10">
+        <select name="rows" id="rows" class="size selector" data-min="2" data-max="10">
             <!-- To be filled by JavaScript --></select>
         <label for="cols">Columns</label>
-        <select name="cols" id="cols" class="sizeSelector" data-min="2" data-max="4">
+        <select name="cols" id="cols" class="size selector" data-min="2" data-max="4">
             <!-- To be filled by JavaScript --></select>
         <label for="cols">Algorithm</label>
-        <select name="algorithm" id="algoSelector" data-min="2" data-max="4">
+        <select name="algorithm" id="algo" class="selector" data-min="2" data-max="4">
             <!-- To be filled by JavaScript --></select>
         <div id="input-table">
             <div id="table-header">

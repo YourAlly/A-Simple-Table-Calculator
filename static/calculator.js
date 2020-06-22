@@ -4,7 +4,7 @@ let rows, cols;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Loads the table size selectors
-    document.querySelectorAll('.sizeSelector').forEach((selector) => {
+    document.querySelectorAll('.size').forEach((selector) => {
         max = parseInt(selector.dataset.max);
         min = parseInt(selector.dataset.min)
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         option = document.createElement('option');
         option.innerHTML = algorithm;
         option.value = algorithm;
-        document.querySelector('#algoSelector').append(option);
+        document.querySelector('#algo').append(option);
     }
 
     // Sets form's onsubmit value to a function
@@ -86,6 +86,7 @@ function table_change() {
         }
         body.append(row);
     }
+    body.append(document.createElement('br'));
 }
 
 function submit_form(){
