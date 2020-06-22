@@ -1,7 +1,9 @@
-const COLUMN_VALUES = ['Process', 'Arrival Time', 'Burst Time', 'Priority']
+const COLUMN_VALUES = ['Process', 'Burst_Time' , 'Arrival_Time', 'Priority']
+const ALGORITHMS = ['FCFS', 'SJF', 'SRTF', 'PS', 'RR']
 let rows, cols;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Loads the table size selectors
     document.querySelectorAll('.sizeSelector').forEach((selector) => {
         max = parseInt(selector.dataset.max);
         min = parseInt(selector.dataset.min)
@@ -21,8 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })
 
-    document.querySelector('#submit').onclick = () => {
+    // Loads Algorithm Selector
+    for (algorithm of ALGORITHMS){
+        option = document.createElement('option');
+        option.innerHTML = algorithm;
+        option.value = algorithm;
+        document.querySelector('#algoSelector').append(option);
+    }
+
+    document.querySelector('#form').onsubmit = () => {
         submit_form();
+        return false;
     };
     // Creates Table Once
     table_change();
@@ -33,20 +44,23 @@ function table_change() {
     cols = parseInt(document.querySelector('#cols').value);
 
     // Head selectors
+    CV_copy = COLUMN_VALUES;
     var head = document.querySelector('#table-header');
     head.innerHTML = '';
     head.append(document.createElement('br'));
+    
     for (var i = 0; i < cols; i++) {
         var select = document.createElement("select");
         select.className = `select-area`;
         select.name = `col-header-${i + 1}`;
-        for (var j = 0; j < COLUMN_VALUES.length; j++) {
+       
+        for (var j = 0; j < CV_copy.length; j++) {
             var item = document.createElement('option');
-            item.value = COLUMN_VALUES[j];
-            item.innerHTML = COLUMN_VALUES[j];
-
+            item.value = CV_copy[j];
+            item.innerHTML = CV_copy[j].replace('_', ' ');
             // Just to make it look nicer
             if (i === j) {
+                select.value = item.value;
                 item.selected = "selected";
             }
             select.append(item);
@@ -65,7 +79,8 @@ function table_change() {
             var field = document.createElement('input');
             field.type = 'text';
             field.className = 'input-area';
-            field.name = `col-${j + 1}`
+            field.name = `col-${j + 1}`;
+            field.autocomplete = 'off';
             row.append(field);
         }
         body.append(row);
@@ -73,19 +88,27 @@ function table_change() {
 }
 
 function submit_form(){
-    var request = new XMLHttpRequest();
+    request = new XMLHttpRequest();
     request.open("POST", "/submit");
-    request.responseType='json';
+    request.responseType = 'json';
     request.onload = () => {
         response = request.response;
         console.log(response);
     };
-    // Sending the form data to server just to get a js object
+
+    // Sending the form data to server just to get a js object back
     request.send(new FormData(document.querySelector("#form")));
 
     // print_answer(response);
 }
 
 function print_answer(data){
-    
+    if(data.Process && data.Burst_Time){
+        
+
+    }
+    else(
+        console.log('ERROR: No "Process" or "Burst_Time" inputs')
+    )
+
 }
