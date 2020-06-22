@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.innerHTML = i;
             selector.append(item);
         }
-        selector.onchange = table_change;
+        selector.onchange =  table_change;
     })
 
     // Creates Table Once
@@ -20,8 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function table_change() {
-    var column_values_length = COLUMN_VALUES.length;
-
     rows = parseInt(document.querySelector('#rows').value);
     cols = parseInt(document.querySelector('#cols').value);
 
@@ -29,9 +27,10 @@ function table_change() {
     var head = document.querySelector('#table-header');
     head.innerHTML = '';
     for (var i = 0; i < cols; i++) {
+        
         var select = document.createElement("select");
         select.className = `select-area col-header-${i + 1}`;
-        for (var j = 0; j < column_values_length; j++) {
+        for (var j = 0; j < COLUMN_VALUES.length; j++) {
             var item = document.createElement('option');
             item.value = COLUMN_VALUES[j];
             item.innerHTML = COLUMN_VALUES[j];
@@ -47,7 +46,7 @@ function table_change() {
     for (var i = 0; i < rows; i++) {
         row = document.createElement('div');
         row.className += `row-${i + 1}`;
-       
+
         for (var j = 0; j < cols; j++) {
             var field = document.createElement('input');
             field.type = 'text';
@@ -56,5 +55,5 @@ function table_change() {
         }
         body.append(row);
     }
-    
+
 }

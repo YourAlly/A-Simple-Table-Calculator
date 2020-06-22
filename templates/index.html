@@ -10,13 +10,14 @@
 </head>
 
 <body>
+
     <label for="rows">Rows</label>
     <select name="cols" id="rows" class="sizeSelector" data-min="2" data-max="10">
         <!-- To be filled by JavaScript --></select>
     <label for="cols">Columns</label>
     <select name="cols" id="cols" class="sizeSelector" data-min="2" data-max="4">
         <!-- To be filled by JavaScript --></select>
-    <form>
+    <form action="{{ url_for('submit') }}" method="POST">
         <div id="input-table">
             <div id="table-header">
                 <!-- Insert column value selectors here -->
@@ -27,7 +28,7 @@
             </div>
 
         </div>
-        <button id="submit" type="submit">Submit</button>
+        <button id="submit">Submit</button>
     </form>
 </body>
 
