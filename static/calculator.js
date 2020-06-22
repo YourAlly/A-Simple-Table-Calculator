@@ -15,9 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // It looks cooler when you do it like this
-        selector.onchange = () => {table_change();};
+        selector.onchange = () => {
+            table_change();
+        };
+
     })
 
+    document.querySelector('#submit').onclick = () => {
+        submit_form();
+    };
     // Creates Table Once
     table_change();
 })
@@ -29,6 +35,7 @@ function table_change() {
     // Head selectors
     var head = document.querySelector('#table-header');
     head.innerHTML = '';
+    head.append(document.createElement('br'));
     for (var i = 0; i < cols; i++) {
         var select = document.createElement("select");
         select.className = `select-area`;
@@ -63,5 +70,22 @@ function table_change() {
         }
         body.append(row);
     }
+}
 
+function submit_form(){
+    var request = new XMLHttpRequest();
+    request.open("POST", "/submit");
+    request.responseType='json';
+    request.onload = () => {
+        response = request.response;
+        console.log(response);
+    };
+    // Sending the form data to server just to get a js object
+    request.send(new FormData(document.querySelector("#form")));
+
+    // print_answer(response);
+}
+
+function print_answer(data){
+    
 }
