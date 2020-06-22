@@ -9,9 +9,9 @@ I didn't have to do this, but here I am
 
 <a href="https://docs.google.com/document/d/1ThsHtAts3uM2JMuSe31IZnwZHvrgffvD3XSHSXfvXGI/edit?usp=sharing">Link to the problem</a>
 
-    I need a way to answer these questions without having to calculate and draw a gantt chart for every item.
+I need a way to answer these questions without having to calculate and draw a gantt chart for every item.
 
-    Thought of using Tkinter at first, but it looks like using JavaScript is better since it looks like JavaScript is really important nowadays.
+Thought of using Tkinter at first, but it looks like using JavaScript is better since it looks like JavaScript is really important nowadays.
 
 # Languages I will use:
 		
@@ -23,9 +23,9 @@ I didn't have to do this, but here I am
 
 # How the final product should look like:
 	
-	I have no idea, but most likely i’ll just use a single page and just use XML http requests to retrieve data from the server if I use python (I did).
+I have no idea, but most likely i’ll just use a single page and just use XML http requests to retrieve data from the server if I use python (I did).
 
 # Was it worth it?:
 	
-	I’m not yet done, but I’m sure it’s a no. It’s fun though.
+I’m not yet done, but I’m sure it’s a no. It’s fun though.
 
