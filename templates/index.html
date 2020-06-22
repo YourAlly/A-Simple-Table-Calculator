@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}">
+    <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    <title>
+        OS Scheduling Calculator
+    </title>
+</head>
+
+<body>
+    <label for="rows">Rows</label>
+    <select name="cols" id="rows" class="sizeSelector" data-min="2" data-max="10">
+        <!-- To be filled by JavaScript --></select>
+    <label for="cols">Columns</label>
+    <select name="cols" id="cols" class="sizeSelector" data-min="2" data-max="4">
+        <!-- To be filled by JavaScript --></select>
+    <form>
+        <div id="input-table">
+            <div id="table-header">
+                <!-- Insert column value selectors here -->
+            </div>
+
+            <div id="table-body">
+                <!-- Insert input fields here -->
+            </div>
+
+        </div>
+        <button id="submit" type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

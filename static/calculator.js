@@ -1,4 +1,5 @@
-const COLUMN_VALUES = ['Process', 'Arrival Time', 'Burst Time', 'Turnaround Time', 'Waiting Time', 'Priority']
+const COLUMN_VALUES = ['Process', 'Arrival Time', 'Burst Time', 'Priority']
+let rows, cols;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.sizeSelector').forEach((selector) => {
@@ -21,15 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function table_change() {
     var column_values_length = COLUMN_VALUES.length;
 
-    const rows = parseInt(document.querySelector('#rows').value);
-    const cols = parseInt(document.querySelector('#cols').value);
+    rows = parseInt(document.querySelector('#rows').value);
+    cols = parseInt(document.querySelector('#cols').value);
 
     // Head selectors
     var head = document.querySelector('#table-header');
     head.innerHTML = '';
     for (var i = 0; i < cols; i++) {
         var select = document.createElement("select");
-        select.className = `select-area col-${i + 1}`;
+        select.className = `select-area col-header-${i + 1}`;
         for (var j = 0; j < column_values_length; j++) {
             var item = document.createElement('option');
             item.value = COLUMN_VALUES[j];
@@ -46,6 +47,7 @@ function table_change() {
     for (var i = 0; i < rows; i++) {
         row = document.createElement('div');
         row.className += `row-${i + 1}`;
+       
         for (var j = 0; j < cols; j++) {
             var field = document.createElement('input');
             field.type = 'text';
@@ -54,5 +56,5 @@ function table_change() {
         }
         body.append(row);
     }
-
+    
 }
