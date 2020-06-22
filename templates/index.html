@@ -1,39 +1,63 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}">
+  <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='dist/rowcol.css') }}"
+    />
     <script src="{{ url_for('static', filename='calculator.js') }}"></script>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     <title>
-        Scheduling Calculator
+      Scheduling Calculator
     </title>
-</head>
+  </head>
 
-<body>
+  <body>
     <form id="form">
-        <label for="rows">Rows</label>
-        <select name="rows" id="rows" class="size selector" data-min="2" data-max="10">
-            <!-- To be filled by JavaScript --></select>
-        <label for="cols">Columns</label>
-        <select name="cols" id="cols" class="size selector" data-min="2" data-max="4">
-            <!-- To be filled by JavaScript --></select>
-        <label for="cols">Algorithm</label>
-        <select name="algorithm" id="algo" class="selector" data-min="2" data-max="4">
-            <!-- To be filled by JavaScript --></select>
-        <div id="input-table">
-            <div id="table-header">
-                <!-- Insert column value selectors here -->
-            </div>
-
-            <div id="table-body">
-                <!-- Insert input fields here -->
-            </div>
+      <label for="rows">Rows</label>
+      <select
+        name="rows"
+        id="rows"
+        class="size selector"
+        data-min="2"
+        data-max="10"
+      >
+        <!-- To be filled by JavaScript --></select
+      >
+      <label for="cols">Columns</label>
+      <select
+        name="cols"
+        id="cols"
+        class="size selector"
+        data-min="2"
+        data-max="4"
+      >
+        <!-- To be filled by JavaScript --></select
+      >
+      <label for="cols">Algorithm</label>
+      <select
+        name="algorithm"
+        id="algo"
+        class="selector"
+        data-min="2"
+        data-max="4"
+      >
+        <!-- To be filled by JavaScript --></select
+      >
+      <div id="input-table">
+        <div id="table-header">
+          <!-- Insert column value selectors here -->
         </div>
 
+        <div id="table-body">
+          <!-- Insert input fields here -->
+        </div>
+      </div>
     </form>
     <button id="submit">Submit</button>
-
-</body>
-
+    
+    <table>
+      <!-- To be filled by JavaScript -->
+    </table>
+  </body>
 </html>

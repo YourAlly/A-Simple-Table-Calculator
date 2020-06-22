@@ -28,3 +28,18 @@
 .selector {
   margin-right: 20px;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+table {
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid black;
+  padding: 15px;
+  text-align: center;
+}

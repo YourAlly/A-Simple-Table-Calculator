@@ -1,4 +1,4 @@
-const COLUMN_VALUES = ['Process', 'Burst_Time' , 'Arrival_Time', 'Priority']
+const COLUMN_VALUES = ['Process', 'Burst_Time', 'Arrival_Time', 'Priority']
 const ALGORITHMS = ['FCFS', 'SJF', 'SRTF', 'PS', 'RR']
 let rows, cols;
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Loads Algorithm Selector
-    for (algorithm of ALGORITHMS){
+    for (algorithm of ALGORITHMS) {
         option = document.createElement('option');
         option.innerHTML = algorithm;
         option.value = algorithm;
@@ -49,12 +49,12 @@ function table_change() {
     var head = document.querySelector('#table-header');
     head.innerHTML = '';
     head.append(document.createElement('br'));
-    
+
     for (var i = 0; i < cols; i++) {
         var select = document.createElement("select");
         select.className = `select-area`;
         select.name = `col-header-${i + 1}`;
-       
+
         for (var j = 0; j < CV_copy.length; j++) {
             var item = document.createElement('option');
             item.value = CV_copy[j];
@@ -89,7 +89,7 @@ function table_change() {
     body.append(document.createElement('br'));
 }
 
-function submit_form(){
+function submit_form() {
     request = new XMLHttpRequest();
 
     // Opens up a connection to the url (It's like opening a file)
@@ -98,26 +98,71 @@ function submit_form(){
 
     // Sets XML Http Request's onload value to a function
     request.onload = () => {
-        response = request.response;
-        console.log(response);
+        let response = request.response;
+        calculate_answer(response);
     };
 
     // Sending the form data to server just to get a js object back
     request.send(new FormData(document.querySelector("#form")));
-
-    print_answer(response);
 }
 
-function print_answer(data) {
-    if (data.Process && data.Burst_Time) {
-        // TODO
+function calculate_answer(data) {
+
+    // If Arrival_Time column doesn't exist set all to 0
+    if (!data['Arrival_Time']) {
+        var values = [];
+        for (var i = 0; i < rows; i++) {
+            values.push(0);
+        }
+        data['Arrival_Time'] = values;
     }
-    else {
+
+    if (data['Process'] && data['Burst_Time']) {
+        data['Sum'] = calculate_sum(data);
+        console.log(data['Sum']);
+    } else {
         console.log('ERROR: No "Process" or "Burst_Time" inputs');
     }
-
+    console.log(data);
+    fill_table(data);
 }
 
-function calculate(data) {
+// Just to try out the calculator functionality
+function calculate_sum(data) {
     // TODO
+    var sums = [];
+    for (var i = 0; i < rows; i++) {
+        sums.push(parseInt(data['Process'][i]) + parseInt(data['Burst_Time'][i]));
+    }
+    return sums;
+}
+
+function fill_table(data) {
+    table = document.querySelector('table');
+    table.innerHTML = '';
+    
+    // Table Header
+    table_head = document.createElement('thead');
+    head_row = document.createElement('tr');
+
+    for (key of Object.keys(data)){
+        cell = document.createElement('td');
+        cell.innerHTML = key.replace('_', ' ');
+        head_row.append(cell);
+    }
+    table_head.append(head_row);
+    table.append(table_head);
+
+    // Table Rows
+    table_body = document.createElement('tbody');
+    for (var i = 0; i < rows; i++) {
+        row = document.createElement('tr');
+        for (key of Object.keys(data)) {
+            cell = document.createElement('td');
+            cell.innerHTML = data[key][i];
+            row.append(cell);
+        }
+        table_body.append(row);
+    }
+    table.append(table_body);
 }
