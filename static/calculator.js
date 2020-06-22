@@ -31,10 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#algoSelector').append(option);
     }
 
+    // Sets form's onsubmit value to a function
     document.querySelector('#form').onsubmit = () => {
         submit_form();
         return false;
     };
+
     // Creates Table Once
     table_change();
 })
@@ -89,8 +91,12 @@ function table_change() {
 
 function submit_form(){
     request = new XMLHttpRequest();
+
+    // Opens up a connection to the url (It's like opening a file)
     request.open("POST", "/submit");
     request.responseType = 'json';
+
+    // Sets XML Http Request's onload value to a function
     request.onload = () => {
         response = request.response;
         console.log(response);
@@ -99,17 +105,18 @@ function submit_form(){
     // Sending the form data to server just to get a js object back
     request.send(new FormData(document.querySelector("#form")));
 
-    // print_answer(response);
+    print_answer(response);
 }
 
 function print_answer(data){
     if(data.Process && data.Burst_Time){
         // TODO
-
     }
-    else(
+    else{
         console.log('ERROR: No "Process" or "Burst_Time" inputs');
-    )
+    }
+        
+    
 
 }
 
