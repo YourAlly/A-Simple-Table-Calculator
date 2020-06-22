@@ -108,18 +108,16 @@ function submit_form(){
     print_answer(response);
 }
 
-function print_answer(data){
-    if(data.Process && data.Burst_Time){
+function print_answer(data) {
+    if (data.Process && data.Burst_Time) {
         // TODO
     }
-    else{
+    else {
         console.log('ERROR: No "Process" or "Burst_Time" inputs');
     }
-        
-    
 
 }
 
-function calculate(data){
+function calculate(data) {
     // TODO
 }
