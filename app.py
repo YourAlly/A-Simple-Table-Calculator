@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, Response
+import re
+
+REQUIRED = ['1-Process', '2-Burst_Time']
 
 app = Flask(__name__)
 
@@ -19,17 +22,21 @@ def submit():
 
         # Checks if no header values are alike
         if request.form.get(f'col-header-{i + 1}') in head_names:
-            print("Error: There can only be one of each header values")
-            return Response(status=400)
+            return jsonify({'error': 'Error: There can only be one of each header values'}), 400
         head_names.add(request.form.get(f'col-header-{i + 1}'))
 
         # Checks if all fields have values
         if '' in request.form.getlist(f'col-{i + 1}'):
-            print("Error: All fields should have values")
-            return Response(status=400)
+            return jsonify({'error': 'Error: All fields should have values'}), 400
         
-        # Gets list for every column
+        # Gets a list for every column
         columns_values[request.form.get(f'col-header-{i + 1}')] = request.form.getlist(f'col-{i + 1}')
-        print(columns_values)
 
-    return jsonify(columns_values)
+    # Checks if Process and Burst Time inputs exist
+    for required in REQUIRED:
+        if not required in head_names:
+            return jsonify({'error': f'Error: [Input-{required}] should exist'}), 400
+
+    print(columns_values)
+
+    return jsonify(columns_values), 200

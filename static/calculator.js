@@ -1,4 +1,4 @@
-const COLUMN_VALUES = ['Process', 'Burst_Time', 'Arrival_Time', 'Priority']
+const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
 const ALGORITHMS = ['FCFS', 'SJF', 'SRTF', 'PS', 'RR']
 let rows, cols;
 
@@ -58,7 +58,7 @@ function table_change() {
         for (var j = 0; j < CV_copy.length; j++) {
             var item = document.createElement('option');
             item.value = CV_copy[j];
-            item.innerHTML = CV_copy[j].replace('_', ' ');
+            item.innerHTML = CV_copy[j].replace("_", " ").slice(2);
             // Just to make it look nicer
             if (i === j) {
                 select.value = item.value;
@@ -99,55 +99,31 @@ function submit_form() {
     // Sets XML Http Request's onload value to a function
     request.onload = () => {
         let response = request.response;
-        calculate_answer(response);
+        document.querySelector('.messages').innerHTML = '';
+        if (!response['error']) {
+            calculate_answer(response);
+        }
+        else {
+            document.querySelector('#error').innerHTML = response['error'];
+        }
     };
 
     // Sending the form data to server just to get a js object back
     request.send(new FormData(document.querySelector("#form")));
 }
 
-function calculate_answer(data) {
-
-    // If Arrival_Time column doesn't exist set all to 0
-    if (!data['Arrival_Time']) {
-        var values = [];
-        for (var i = 0; i < rows; i++) {
-            values.push(0);
-        }
-        data['Arrival_Time'] = values;
-    }
-
-    if (data['Process'] && data['Burst_Time']) {
-        data['Sum'] = calculate_sum(data);
-        console.log(data['Sum']);
-    } else {
-        console.log('ERROR: No "Process" or "Burst_Time" inputs');
-    }
-    console.log(data);
-    fill_table(data);
-}
-
-// Just to try out the calculator functionality
-function calculate_sum(data) {
-    // TODO
-    var sums = [];
-    for (var i = 0; i < rows; i++) {
-        sums.push(parseInt(data['Process'][i]) + parseInt(data['Burst_Time'][i]));
-    }
-    return sums;
-}
-
 function fill_table(data) {
     table = document.querySelector('table');
     table.innerHTML = '';
-    
+
     // Table Header
     table_head = document.createElement('thead');
     head_row = document.createElement('tr');
 
-    for (key of Object.keys(data)){
+    for (key of Object.keys(data)) {
         cell = document.createElement('td');
-        cell.innerHTML = key.replace('_', ' ');
+        cell.innerHTML = key.split('_').join(" ");
+        cell.innerHTML = cell.innerHTML.replace(`${parseInt(cell.innerHTML)}-`, "");
         head_row.append(cell);
     }
     table_head.append(head_row);
@@ -166,3 +142,34 @@ function fill_table(data) {
     }
     table.append(table_body);
 }
+
+function calculate_answer(data) {
+
+    // If Arrival_Time column doesn't exist set all to 0
+    if (!data['3-Arrival_Time']) {
+        var values = [];
+        for (var i = 0; i < rows; i++) {
+            values.push(0);
+        }
+        data['3-Arrival_Time'] = values;
+    }
+    // Calculations time
+    data['Sum_of_burst_time_and_arrival_time'] = calculate_sum(data);
+    console.log(data['Sum_of_burst_time_and_arrival_time']);
+
+    console.log(data);
+    fill_table(data);
+}
+
+// Just to try out the calculator functionality
+
+// Calculations
+function calculate_sum(data) {
+    // TODO
+    var sums = [];
+    for (var i = 0; i < rows; i++) {
+        sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
+    }
+    return sums;
+}
+
