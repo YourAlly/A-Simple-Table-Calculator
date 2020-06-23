@@ -1,23 +1,23 @@
-#input-table {
+#form #input-table {
   display: table;
 }
 
-#input-table #submit {
+#form #input-table #submit {
   float: right;
 }
 
-#input-table #table-header {
+#form #input-table #table-header {
   display: table-header-group;
 }
 
-#input-table #table-header .select-area {
+#form #input-table #table-header .select-area {
   width: 264px;
   margin-left: 0px;
   margin-right: 19px;
   margin-bottom: 5px;
 }
 
-#input-table #table-body .input-area {
+#form #input-table #table-body .input-area {
   width: 255px;
   margin-left: 0px;
   margin-right: 20px;
@@ -25,16 +25,14 @@
   margin-bottom: 5px;
 }
 
-.selector {
+#form .selector {
   margin-right: 20px;
 }
 
 table {
   border-collapse: collapse;
-}
-
-table {
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 table th,

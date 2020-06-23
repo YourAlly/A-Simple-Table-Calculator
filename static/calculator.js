@@ -1,8 +1,23 @@
 const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
-const ALGORITHMS = ['FCFS', 'SJF', 'SRTF', 'PS', 'RR']
+
+// Object that holds the functions
+const ALGORITHMS = {
+    'SUM':  calculate_sum,
+    'FCFS': '',
+    'SJF':  '',
+    'SRTF': '',
+    'PS':   '',
+    'RR':   ''
+}
+
 let rows, cols;
 
+/*/                                     ///
+        The front-end JavaScript
+ ///                                   /*/
+
 document.addEventListener('DOMContentLoaded', () => {
+
     // Loads the table size selectors
     document.querySelectorAll('.size').forEach((selector) => {
         max = parseInt(selector.dataset.max);
@@ -18,16 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // It looks cooler when you do it like this
         selector.onchange = () => {
-            table_change();
+            print_form();
         };
-
     })
 
     // Loads Algorithm Selector
-    for (algorithm of ALGORITHMS) {
+    for (key of Object.keys(ALGORITHMS)) {
         option = document.createElement('option');
-        option.innerHTML = algorithm;
-        option.value = algorithm;
+        option.innerHTML = key;
+        option.value = key;
         document.querySelector('#algo').append(option);
     }
 
@@ -37,10 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Creates Table Once
-    table_change();
+    print_form();
 })
 
-function table_change() {
+
+function print_form() {
     rows = parseInt(document.querySelector('#rows').value);
     cols = parseInt(document.querySelector('#cols').value);
 
@@ -59,7 +74,8 @@ function table_change() {
             var item = document.createElement('option');
             item.value = CV_copy[j];
             item.innerHTML = CV_copy[j].replace("_", " ").slice(2);
-            // Just to make it look nicer
+
+            // Just to make it look and feel nicer
             if (i === j) {
                 select.value = item.value;
                 item.selected = "selected";
@@ -89,28 +105,6 @@ function table_change() {
     body.append(document.createElement('br'));
 }
 
-function submit_form() {
-    request = new XMLHttpRequest();
-
-    // Opens up a connection to the url (It's like opening a file)
-    request.open("POST", "/submit");
-    request.responseType = 'json';
-
-    // Sets XML Http Request's onload value to a function
-    request.onload = () => {
-        let response = request.response;
-        document.querySelector('.messages').innerHTML = '';
-        if (!response['error']) {
-            calculate_answer(response);
-        }
-        else {
-            document.querySelector('#error').innerHTML = response['error'];
-        }
-    };
-
-    // Sending the form data to server just to get a js object back
-    request.send(new FormData(document.querySelector("#form")));
-}
 
 function fill_table(data) {
     table = document.querySelector('table');
@@ -143,6 +137,35 @@ function fill_table(data) {
     table.append(table_body);
 }
 
+
+/*/                                     ///
+        The actual Math Stuff
+ ///                                   /*/
+
+function submit_form() {
+    request = new XMLHttpRequest();
+
+    // Opens up a connection to the url (It's like opening a file)
+    request.open("POST", "/submit");
+    request.responseType = 'json';
+
+    // Sets XML Http Request's onload value to a function
+    request.onload = () => {
+        let response = request.response;
+        document.querySelector('.messages').innerHTML = '';
+        if (!response['error']) {
+            calculate_answer(response);
+        }
+        else {
+            document.querySelector('#error').innerHTML = response['error'];
+        }
+    };
+
+    // Sending the form data to server just to get a js object back
+    request.send(new FormData(document.querySelector("#form")));
+}
+
+
 function calculate_answer(data) {
 
     // If Arrival_Time column doesn't exist set all to 0
@@ -153,23 +176,29 @@ function calculate_answer(data) {
         }
         data['3-Arrival_Time'] = values;
     }
-    // Calculations time
-    data['Sum_of_burst_time_and_arrival_time'] = calculate_sum(data);
-    console.log(data['Sum_of_burst_time_and_arrival_time']);
 
+    // Calculations time
+    data = ALGORITHMS[document.querySelector('#algo').value](data);
+
+    // Logs data into the console and fills the table
     console.log(data);
     fill_table(data);
 }
 
-// Just to try out the calculator functionality
 
-// Calculations
+// Just to try out the calculator functionality
 function calculate_sum(data) {
     // TODO
     var sums = [];
     for (var i = 0; i < rows; i++) {
         sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
     }
-    return sums;
+    var row_name = 'Sum_of_Burst_time_and_Arrival_time';
+    data[row_name] = sums;
+    console.log(data[row_name]);
+
+    return data;
 }
+
+// Insert functions here
 
