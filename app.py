@@ -37,6 +37,4 @@ def submit():
         if not required in head_names:
             return jsonify({'error': f'Error: [Input-{required}] should exist'}), 400
 
-    print(columns_values)
-
     return jsonify(columns_values), 200

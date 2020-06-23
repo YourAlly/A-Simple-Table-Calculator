@@ -13,9 +13,9 @@ const ALGORITHMS = {
 
 let rows, cols;
 
-/*/                                     ///
-        The front-end JavaScript
- ///                                   /*/
+/*/                                         ///
+            The front-end JavaScript
+///                                         /*/
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -63,7 +63,7 @@ function print_form() {
     // Head selectors
     CV_copy = COLUMN_VALUES;
     var head = document.querySelector('#table-header');
-    head.innerHTML = '';
+    head.innerHTML = null;
     head.append(document.createElement('br'));
 
     for (var i = 0; i < cols; i++) {
@@ -88,7 +88,7 @@ function print_form() {
 
     // Table input fields
     var body = document.querySelector('#table-body');
-    body.innerHTML = '';
+    body.innerHTML = null;
     for (var i = 0; i < rows; i++) {
         row = document.createElement('div');
         row.className = `row-${i + 1}`;
@@ -108,8 +108,9 @@ function print_form() {
 
 
 function fill_table(data) {
+    document.querySelector('#table-title').innerHTML = document.querySelector('#algo').value;
     table = document.querySelector('table');
-    table.innerHTML = '';
+    table.innerHTML = null;
 
     // Table Header
     table_head = document.createElement('thead');
@@ -139,9 +140,9 @@ function fill_table(data) {
 }
 
 
-/*/                                     ///
-        The actual Math Stuff
- ///                                   /*/
+/*/                                         ///
+            The actual Math Stuff
+///                                         /*/
 
 function submit_form() {
     request = new XMLHttpRequest();
@@ -153,7 +154,7 @@ function submit_form() {
     // Sets XML Http Request's onload value to a function
     request.onload = () => {
         let response = request.response;
-        document.querySelector('.messages').innerHTML = '';
+        document.querySelector('.messages').innerHTML = null;
         if (!response['error']) {
             calculate_answer(response);
         }
@@ -187,6 +188,11 @@ function calculate_answer(data) {
 }
 
 
+/*/                                     ///
+            Insert Functions Here
+///                                     /*/
+
+
 // Just to try out the calculator functionality
 function calculate_sum(data) {
     // TODO
@@ -198,10 +204,13 @@ function calculate_sum(data) {
     data[row_name] = sums;
     console.log(data[row_name]);
 
+    // Removes the Gantt Chart if it exists
+    document.querySelector('#gantt-title').innerHTML = null;
+    document.querySelector('#gantt').innerHTML = null;
+
     return data;
 }
 
-// Insert functions here
 
 function fcfs(data){
     var wait = 0;
@@ -213,14 +222,14 @@ function fcfs(data){
     data['5-Waiting_Time'] = times;
 
     // Creates a Gantt Chart
+    document.querySelector('#gantt-title').innerHTML = 'Gantt Chart:';
     var gantt = '';
-    gantt += '<h3>Gantt Chart: </h3> <br>'
     for (var i = 0; i < rows; i++){
         lc = Math.round(LINES * (parseInt(data['2-Burst_Time'][i]) / wait));
         for (var j = 0; j < lc; j++){
             gantt += '-';
         }
-        gantt += `|<b>${data['1-Process'][i]}</b>(${data['2-Burst_Time'][i]})| `;
+        gantt += ` |<b>${data['1-Process'][i]}</b> (${data['2-Burst_Time'][i]})| `;
     }
     
     document.querySelector('#gantt').innerHTML = gantt;
