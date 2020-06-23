@@ -156,6 +156,9 @@ function submit_form() {
         let response = request.response;
         document.querySelector('.messages').innerHTML = null;
         if (!response['error']) {
+            // Removes the Gantt Chart if it exists
+            document.querySelector('#gantt-title').innerHTML = null;
+            document.querySelector('#gantt').innerHTML = null;
             calculate_answer(response);
         }
         else {
@@ -193,9 +196,8 @@ function calculate_answer(data) {
 ///                                     /*/
 
 
-// Just to try out the calculator functionality
+// Just to try it out
 function calculate_sum(data) {
-    // TODO
     var sums = [];
     for (var i = 0; i < rows; i++) {
         sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
@@ -203,10 +205,6 @@ function calculate_sum(data) {
     var row_name = 'Sum_of_Burst_time_and_Arrival_time';
     data[row_name] = sums;
     console.log(data[row_name]);
-
-    // Removes the Gantt Chart if it exists
-    document.querySelector('#gantt-title').innerHTML = null;
-    document.querySelector('#gantt').innerHTML = null;
 
     return data;
 }
