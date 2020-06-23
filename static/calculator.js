@@ -1,13 +1,14 @@
 const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
+const LINES = 50;
 
 // Object that holds the functions
 const ALGORITHMS = {
-    'SUM':  calculate_sum,
-    'FCFS': (data) => { console.log("Not Yet Implemented"); return data; },
-    'SJF':  (data) => { console.log("Not Yet Implemented"); return data; },
+    'FCFS': fcfs,
+    'SJF': (data) => { console.log("Not Yet Implemented"); return data; },
     'SRTF': (data) => { console.log("Not Yet Implemented"); return data; },
-    'PS':   (data) => { console.log("Not Yet Implemented"); return data; },
-    'RR':   (data) => { console.log("Not Yet Implemented"); return data; }
+    'PS': (data) => { console.log("Not Yet Implemented"); return data; },
+    'RR': (data) => { console.log("Not Yet Implemented"); return data; },
+    'SUM': calculate_sum
 }
 
 let rows, cols;
@@ -202,3 +203,27 @@ function calculate_sum(data) {
 
 // Insert functions here
 
+function fcfs(data){
+    var wait = 0;
+    var times = [];
+    for (var i = 0; i < rows; i++){
+        times.push(wait);
+        wait += parseInt(data['2-Burst_Time'][i])
+    }
+    data['5-Waiting_Time'] = times;
+
+    // Creates a Gantt Chart
+    var gantt = '';
+    gantt += '<h3>Gantt Chart: </h3> <br>'
+    for (var i = 0; i < rows; i++){
+        lc = Math.round(LINES * (parseInt(data['2-Burst_Time'][i]) / wait));
+        for (var j = 0; j < lc; j++){
+            gantt += '-';
+        }
+        gantt += `|<b>${data['1-Process'][i]}</b>(${data['2-Burst_Time'][i]})| `;
+    }
+    
+    document.querySelector('#gantt').innerHTML = gantt;
+
+    return data;
+}
