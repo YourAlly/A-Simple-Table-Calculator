@@ -3,11 +3,11 @@ const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priorit
 // Object that holds the functions
 const ALGORITHMS = {
     'SUM':  calculate_sum,
-    'FCFS': '',
-    'SJF':  '',
-    'SRTF': '',
-    'PS':   '',
-    'RR':   ''
+    'FCFS': (data) => { console.log("Not Yet Implemented"); return data; },
+    'SJF':  (data) => { console.log("Not Yet Implemented"); return data; },
+    'SRTF': (data) => { console.log("Not Yet Implemented"); return data; },
+    'PS':   (data) => { console.log("Not Yet Implemented"); return data; },
+    'RR':   (data) => { console.log("Not Yet Implemented"); return data; }
 }
 
 let rows, cols;
