@@ -99,12 +99,13 @@ let rows, cols;
 document.addEventListener('DOMContentLoaded', () => {
     // Loads the table size selectors
     document.querySelectorAll('.size').forEach((selector) => {
-        max = parseInt(selector.dataset.max);
-        min = parseInt(selector.dataset.min)
+        var max = parseInt(selector.dataset.max);
+        var min = parseInt(selector.dataset.min);
 
         // Fills it with the options available
+        var item;
         for (var i = min; i <= max; i++) {
-            var item = document.createElement('option');
+            item = document.createElement('option');
             item.value = i;
             item.innerHTML = i;
             selector.append(item);
@@ -117,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Loads Algorithm Selector
+    var option;
     for (key of Object.keys(ALGORITHMS)) {
         option = document.createElement('option');
         option.innerHTML = key;
@@ -218,6 +220,7 @@ function fill_table(data) {
     document.querySelector('#table-title').innerHTML = document.querySelector('#algo').value;
     var table = document.querySelector('table');
     table.innerHTML = null;
+    var row, cell;
 
     // Table Header
     var table_head = document.createElement('thead');
