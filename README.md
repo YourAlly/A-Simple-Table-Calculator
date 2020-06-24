@@ -25,9 +25,17 @@ Thought of using Tkinter at first, but it looks like using JavaScript is better 
 
 ## How to use
 
-IDK how to explain it, but one can easily add new algorithms to be calculated (of course, a little bit of JS knowledge is required)
+### Calculating
 
-    // Just to try it out
+Select the size of the table to be used and fill them up
+
+Be warned that that the previous inputs will be gone after changing the size of the table
+
+### Adding new functions
+
+One can easily (I think) add new algorithms to be calculated (of course, a little bit of JS knowledge is required)
+
+    // New Function
     function calculate_sum(data) {
         var sums = [];
         for (var i = 0; i < rows; i++) {
@@ -40,23 +48,58 @@ IDK how to explain it, but one can easily add new algorithms to be calculated (o
         return data;
     }
 
-And add the function with to the object with a key
+And add the function to the object by first naming the inserting an object with a name of your own choice with the 'function' key containing a function as it's value.
 
     // Object that holds the functions
     const ALGORITHMS = {
-        'FCFS': fcfs,
-        'SJF': (data) => { console.log("Not Yet Implemented"); return data; },
-        'SRTF': (data) => { console.log("Not Yet Implemented"); return data; },
-        'PS': (data) => { console.log("Not Yet Implemented"); return data; },
-        'RR': (data) => { console.log("Not Yet Implemented"); return data; },
-        'SUM': calculate_sum
+
+        'FCFS': {
+            'function': fcfs,
+            'requirements': ['1-Process', '2-Burst_Time'],
+            'unique': ['1-Process']
+        },
+
+        'SJF': {
+            'function': not_yet_implemented
+        },
+
+        'SRTF': {
+            'function': not_yet_implemented
+        },
+
+        'PS': {
+            'function': not_yet_implemented
+        },
+
+        'RR': {
+            'function': not_yet_implemented 
+        },
+
+        // New function
+        'SUM': {
+            'function': calculate_sum,                      // Insert the function here
+            'requirements': ['1-Process', '2-Burst_Time'],  // Insert required inputs here
+            'fill_columns': ['3-Arrival_Time']              // Columns to be filled with 0s (if they don't exist)
+            'unique': ['1-Process']                         // Columns to have unique inputs
+        }
     }
+
+You can also add requirements (Key: 'requirements'), columns to be filled if they don't exist (Key: 'fill_columns'), and columns that should have unique values (Key: 'unique').
+
+If it requires a different column name you can add a new one
+
+    // You can insert new column names here
+    const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
+
+I added '1-' to make the column go first on the table.
 
 I found it easy, I hope others will find it that way too.
 
-## Was it worth it?
+Unfortunately I haven't made a function that prints a gantt chart yet
 
-Definitely, yes
+## Was it worth it
+
+Definitely, yes.
 
 I could've just solved the problems like a normal person, I just used it as a reason to learn more about JavaScript (and I did).
 

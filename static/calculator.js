@@ -1,23 +1,104 @@
+// You can insert new stuff here too
 const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
-const LINES = 50;
+
+// Gantt Chart Size
+const GANTT_SIZE = 70;
 
 // Object that holds the functions
 const ALGORITHMS = {
-    'FCFS': fcfs,
-    'SJF': (data) => { console.log("Not Yet Implemented"); return data; },
-    'SRTF': (data) => { console.log("Not Yet Implemented"); return data; },
-    'PS': (data) => { console.log("Not Yet Implemented"); return data; },
-    'RR': (data) => { console.log("Not Yet Implemented"); return data; },
-    'SUM': calculate_sum
+    'FCFS': {
+        'function': fcfs,
+        'requirements': ['1-Process', '2-Burst_Time'],
+        'unique': ['1-Process']
+    },
+
+    'SJF': {
+        'function': not_yet_implemented
+    },
+
+    'SRTF': {
+        'function': not_yet_implemented
+    },
+
+    'PS': {
+        'function': not_yet_implemented
+    },
+
+    'RR': {
+        'function': not_yet_implemented 
+    },
+
+    // New function
+    'SUM': {
+        'function': calculate_sum,                          // Function to be used
+        'requirements': ['1-Process', '2-Burst_Time'],      // Required inputs
+        'fill_columns': ['3-Arrival_Time'],                 // Columns to be filled if they don't exist
+        'unique': ['1-Process']                             // Columns to have unique inputs
+    }
 }
 
-let rows, cols;
+
+/*/                                     ///
+            Insert Functions Here
+///                                     /*/
+
+
+function fcfs(data) {
+    var wait = 0;
+    var times = [];
+    for (var i = 0; i < rows; i++) {
+        times.push(wait);
+        wait += parseInt(data['2-Burst_Time'][i])
+    }
+    data['5-Waiting_Time'] = times;
+
+    // Creates a Gantt Chart
+    document.querySelector('#gantt-title').innerHTML = 'Gantt Chart:';
+    var gantt = '';
+    var sr = 6;
+    for (var i = 0; i < rows; i++) {
+        lc = Math.round(GANTT_SIZE * (parseInt(data['2-Burst_Time'][i]) / wait)) - sr;
+        for (var j = 0; j < lc; j++) {
+            gantt += '-';
+        }
+        gantt += ` |<b>${data['1-Process'][i]}</b> (${data['2-Burst_Time'][i]})| `;
+    }
+
+    document.querySelector('#gantt').innerHTML = gantt;
+
+    return data;
+}
+
+
+function not_yet_implemented(data) {
+    console.log('Function not found');
+    document.querySelector('#error').innerHTML('Not yet implemented');
+    return data;
+}
+
+
+// New Function
+function calculate_sum(data) {
+    var sums = [];
+    for (var i = 0; i < rows; i++) {
+        sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
+    }
+    var row_name = 'Sum_of_Burst_time_and_Arrival_time';
+    data[row_name] = sums;
+    console.log(data[row_name]);
+
+    return data;
+}
+
 
 /*/                                         ///
             The front-end JavaScript
 ///                                         /*/
 
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    let rows, cols;
 
     // Loads the table size selectors
     document.querySelectorAll('.size').forEach((selector) => {
@@ -106,7 +187,35 @@ function print_form() {
     body.append(document.createElement('br'));
 }
 
+// Submits the form via an XML Http request
+function submit_form() {
+    request = new XMLHttpRequest();
 
+    // Opens up a connection to the url (It's like opening a file)
+    request.open("POST", "/submit");
+    request.responseType = 'json';
+
+    // Sets XML Http Request's onload value to a function
+    request.onload = () => {
+        let response = request.response;
+        document.querySelector('.messages').innerHTML = null;
+        if (!response['error']) {
+            // Removes the Gantt Chart if it exists
+            document.querySelector('#gantt-title').innerHTML = null;
+            document.querySelector('#gantt').innerHTML = null;
+            calculate_answer(response);
+        }
+        else {
+            document.querySelector('#error').innerHTML = response['error'];
+        }
+    };
+
+    // Sending the form data to server just to get a js object back
+    request.send(new FormData(document.querySelector("#form")));
+}
+
+
+// Creates the table for the answer
 function fill_table(data) {
     document.querySelector('#table-title').innerHTML = document.querySelector('#algo').value;
     table = document.querySelector('table');
@@ -140,50 +249,23 @@ function fill_table(data) {
 }
 
 
-/*/                                         ///
-            The actual Math Stuff
+/*/                                        ///
+        The actual calculator stuff
 ///                                         /*/
-
-function submit_form() {
-    request = new XMLHttpRequest();
-
-    // Opens up a connection to the url (It's like opening a file)
-    request.open("POST", "/submit");
-    request.responseType = 'json';
-
-    // Sets XML Http Request's onload value to a function
-    request.onload = () => {
-        let response = request.response;
-        document.querySelector('.messages').innerHTML = null;
-        if (!response['error']) {
-            // Removes the Gantt Chart if it exists
-            document.querySelector('#gantt-title').innerHTML = null;
-            document.querySelector('#gantt').innerHTML = null;
-            calculate_answer(response);
-        }
-        else {
-            document.querySelector('#error').innerHTML = response['error'];
-        }
-    };
-
-    // Sending the form data to server just to get a js object back
-    request.send(new FormData(document.querySelector("#form")));
-}
 
 
 function calculate_answer(data) {
 
     // If Arrival_Time column doesn't exist set all to 0
-    if (!data['3-Arrival_Time']) {
-        var values = [];
-        for (var i = 0; i < rows; i++) {
-            values.push(0);
-        }
-        data['3-Arrival_Time'] = values;
+    data = check_data(data);
+
+    console.log(data);
+    if (!data) {
+        return console.log('Ayy Lmao');
     }
 
     // Calculations time
-    data = ALGORITHMS[document.querySelector('#algo').value](data);
+    data = ALGORITHMS[document.querySelector('#algo').value]['function'](data);
 
     // Logs data into the console and fills the table
     console.log(data);
@@ -191,46 +273,51 @@ function calculate_answer(data) {
 }
 
 
-/*/                                     ///
-            Insert Functions Here
-///                                     /*/
+function check_data(data) {
+    // Checks the requirements
+    selected = document.querySelector('#algo').value;
+    error = document.querySelector('#error');
 
-
-// Just to try it out
-function calculate_sum(data) {
-    var sums = [];
-    for (var i = 0; i < rows; i++) {
-        sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
-    }
-    var row_name = 'Sum_of_Burst_time_and_Arrival_time';
-    data[row_name] = sums;
-    console.log(data[row_name]);
-
-    return data;
-}
-
-
-function fcfs(data){
-    var wait = 0;
-    var times = [];
-    for (var i = 0; i < rows; i++){
-        times.push(wait);
-        wait += parseInt(data['2-Burst_Time'][i])
-    }
-    data['5-Waiting_Time'] = times;
-
-    // Creates a Gantt Chart
-    document.querySelector('#gantt-title').innerHTML = 'Gantt Chart:';
-    var gantt = '';
-    for (var i = 0; i < rows; i++){
-        lc = Math.round(LINES * (parseInt(data['2-Burst_Time'][i]) / wait));
-        for (var j = 0; j < lc; j++){
-            gantt += '-';
+    if (ALGORITHMS[selected]['fill_columns']) {
+        for (fill_column of ALGORITHMS[selected]['fill_columns']) {
+            if (!data[fill_column]) {
+                arr = [];
+                for (var i = 0; i < rows; i++) {
+                    arr.push(0)
+                }
+                data[fill_column] = arr;
+            }
         }
-        gantt += ` |<b>${data['1-Process'][i]}</b> (${data['2-Burst_Time'][i]})| `;
     }
-    
-    document.querySelector('#gantt').innerHTML = gantt;
+
+    if (ALGORITHMS[selected]['requirements']) {
+        for (requirement of ALGORITHMS[selected]['requirements']) {
+            if (!data[requirement]) {
+                error.innerHTML = `Error: COLUMN-${requirement} doesn't exist`;
+                return null;
+            }
+        }
+    }
+
+    if (ALGORITHMS[selected]['unique']) {
+        for (unique of ALGORITHMS[selected]['unique']) {
+            if(!data[unique]){
+                error.innerHTML = `Error: COLUMN-${unique} doesn't exist`;
+                return null;
+            }
+
+            var set = new Set();
+            var arr = data[unique];
+
+            for (value of data[unique]){
+                if (set.has(value)){
+                    error.innerHTML = `Error: COLUMN-${unique} can't have similar values`;
+                    return null;
+                }
+                set.add(value);
+            }
+        }
+    }
 
     return data;
 }

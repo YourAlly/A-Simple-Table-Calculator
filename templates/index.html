@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='dist/rowcol.css') }}"
     />
+
     <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
     <title>
       Calculator
     </title>
+
   </head>
 
   <body>
+
     <form id="form">
+
       <label for="rows">Rows</label>
       <select
         name="rows"
@@ -45,7 +51,9 @@
       >
         <!-- To be filled by JavaScript --></select
       >
+
       <div id="input-table">
+
         <div id="table-header">
           <!-- print_form() -->
         </div>
@@ -53,9 +61,12 @@
         <div id="table-body">
           <!-- print_form() -->
         </div>
+
       </div>
+
     </form>
     <button id="submit">Submit</button>
+    
     <span id="error" class="messages"></span>
     <h3 id="table-title"></h3>
     <h3 id="gantt-title"></h3>
