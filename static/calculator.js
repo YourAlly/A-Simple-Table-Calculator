@@ -25,7 +25,7 @@ const ALGORITHMS = {
     },
 
     'RR': {
-        'function': not_yet_implemented 
+        'function': not_yet_implemented
     },
 
     // New function
@@ -63,9 +63,7 @@ function fcfs(data) {
         }
         gantt += ` |<b>${data['1-Process'][i]}</b> (${data['2-Burst_Time'][i]})| `;
     }
-
     document.querySelector('#gantt').innerHTML = gantt;
-
     return data;
 }
 
@@ -96,10 +94,9 @@ function calculate_sum(data) {
 ///                                         /*/
 
 
+let rows, cols;
+
 document.addEventListener('DOMContentLoaded', () => {
-
-    let rows, cols;
-
     // Loads the table size selectors
     document.querySelectorAll('.size').forEach((selector) => {
         max = parseInt(selector.dataset.max);
@@ -142,7 +139,7 @@ function print_form() {
     cols = parseInt(document.querySelector('#cols').value);
 
     // Head selectors
-    CV_copy = COLUMN_VALUES;
+    var CV_copy = COLUMN_VALUES;
     var head = document.querySelector('#table-header');
     head.innerHTML = null;
     head.append(document.createElement('br'));
@@ -189,7 +186,7 @@ function print_form() {
 
 // Submits the form via an XML Http request
 function submit_form() {
-    request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
 
     // Opens up a connection to the url (It's like opening a file)
     request.open("POST", "/submit");
@@ -200,6 +197,7 @@ function submit_form() {
         let response = request.response;
         document.querySelector('.messages').innerHTML = null;
         if (!response['error']) {
+
             // Removes the Gantt Chart if it exists
             document.querySelector('#gantt-title').innerHTML = null;
             document.querySelector('#gantt').innerHTML = null;
@@ -218,12 +216,12 @@ function submit_form() {
 // Creates the table for the answer
 function fill_table(data) {
     document.querySelector('#table-title').innerHTML = document.querySelector('#algo').value;
-    table = document.querySelector('table');
+    var table = document.querySelector('table');
     table.innerHTML = null;
 
     // Table Header
-    table_head = document.createElement('thead');
-    head_row = document.createElement('tr');
+    var table_head = document.createElement('thead');
+    var head_row = document.createElement('tr');
 
     for (key of Object.keys(data)) {
         cell = document.createElement('td');
@@ -235,7 +233,7 @@ function fill_table(data) {
     table.append(table_head);
 
     // Table Rows
-    table_body = document.createElement('tbody');
+    var table_body = document.createElement('tbody');
     for (var i = 0; i < rows; i++) {
         row = document.createElement('tr');
         for (key of Object.keys(data)) {
@@ -258,10 +256,8 @@ function calculate_answer(data) {
 
     // If Arrival_Time column doesn't exist set all to 0
     data = check_data(data);
-
-    console.log(data);
     if (!data) {
-        return console.log('Ayy Lmao');
+        return console.log('Something went wrong');
     }
 
     // Calculations time
@@ -273,10 +269,10 @@ function calculate_answer(data) {
 }
 
 
+// Checks the fills the columns, checks for the required columns, and checks if the values are unique
 function check_data(data) {
-    // Checks the requirements
-    selected = document.querySelector('#algo').value;
-    error = document.querySelector('#error');
+    var selected = document.querySelector('#algo').value;
+    var error = document.querySelector('#error');
 
     if (ALGORITHMS[selected]['fill_columns']) {
         for (fill_column of ALGORITHMS[selected]['fill_columns']) {
@@ -301,7 +297,7 @@ function check_data(data) {
 
     if (ALGORITHMS[selected]['unique']) {
         for (unique of ALGORITHMS[selected]['unique']) {
-            if(!data[unique]){
+            if (!data[unique]) {
                 error.innerHTML = `Error: COLUMN-${unique} doesn't exist`;
                 return null;
             }
@@ -309,8 +305,8 @@ function check_data(data) {
             var set = new Set();
             var arr = data[unique];
 
-            for (value of data[unique]){
-                if (set.has(value)){
+            for (value of data[unique]) {
+                if (set.has(value)) {
                     error.innerHTML = `Error: COLUMN-${unique} can't have similar values`;
                     return null;
                 }
