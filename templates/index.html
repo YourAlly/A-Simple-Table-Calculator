@@ -4,7 +4,9 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}" />
 
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
     <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    <script src="{{ url_for('static', filename='front-end.js') }}"></script>
 
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
@@ -41,7 +43,7 @@
     <h3 id="table-title"></h3>
     <h3 id="gantt-title"></h3>
     <div id="gantt">
-        <!-- Again, JavaScript -->
+        <!-- create_chart(arrays) -->
     </div>
 
     <table>

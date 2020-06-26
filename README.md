@@ -35,7 +35,7 @@ Be warned that that the previous inputs will be gone after changing the size of 
 
 ### Adding new functions
 
-One can easily (I think) add new algorithms to be calculated (of course, a little bit of JS knowledge is required)
+One can easily (I think) add new algorithms to be calculated (of course, a little bit of JS knowledge is required) on the calculator.js file.
 
     // New Function
     function calculate_sum(data) {
