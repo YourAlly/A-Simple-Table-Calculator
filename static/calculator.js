@@ -1,39 +1,33 @@
-// You can insert new stuff here too
-const COLUMN_VALUES = ['1-Process', '2-Burst_Time', '3-Arrival_Time', '4-Priority']
-
 // Gantt Chart Size
-const GANTT_SIZE = 70;
+const GANTT_SIZE = 40;
 
 // Object that holds the functions
 const ALGORITHMS = {
     'FCFS': {
         'function': fcfs,
+        'columns': ['1-Process', '2-Burst_Time', '2B-Arrival_Time'],
         'requirements': ['1-Process', '2-Burst_Time'],
         'unique': ['1-Process']
     },
 
-    'SJF': {
-        'function': not_yet_implemented
+    'Shortest Job First': {
+        'function': sjf,
+        'columns': ['1-Process', '2-Burst_Time', '2B-Arrival_Time', 'Random Column'],
+        'requirements': ['1-Process', '2-Burst_Time'],
+        'unique': ['1-Process']
     },
 
     'SRTF': {
         'function': not_yet_implemented
     },
 
-    'PS': {
-        'function': not_yet_implemented
-    },
-
-    'RR': {
-        'function': not_yet_implemented
-    },
-
-    // New function
-    'SUM': {
-        'function': calculate_sum,                          // Function to be used
-        'requirements': ['1-Process', '2-Burst_Time'],      // Required inputs
-        'fill_columns': ['3-Arrival_Time'],                 // Columns to be filled if they don't exist
-        'unique': ['1-Process']                             // Columns to have unique inputs
+    // Example function
+    'SUM': {                                                                // Select option name
+        'function': calculate_sum,                                          // Function to be used
+        'columns': ['Column 1', 'Column 2'],                                // Additional columns
+        'requirements': ['Column 1', 'Column 2'],                           // Required inputs
+        'fill_columns': { 'Column 3': Math.floor(Math.random() * 101) },    // Columns to be filled by value if not found
+        'unique': []                                                        // Columns to have unique inputs
     }
 }
 
@@ -42,48 +36,109 @@ const ALGORITHMS = {
             Insert Functions Here
 ///                                     /*/
 
-
+// Completed
 function fcfs(data) {
-    var wait = 0;
+    data['extras'] = {};
+
+    // If arrival time exists
+    if (data['2B-Arrival_Time']) {
+        dict = sort_data(data['1-Process'], data['2-Burst_Time'], data['2B-Arrival_Time']);
+        data['1-Process'] = dict['value_name'];
+        data['2-Burst_Time'] = dict['duration'];
+        data['2B-Arrival_Time'] = data['2B-Arrival_Time'].sort();
+    }
+
+    // Calculates Waiting Time
     var times = [];
+    var wait = 0;
+    var total_w = 0;
     for (var i = 0; i < rows; i++) {
         times.push(wait);
-        wait += parseInt(data['2-Burst_Time'][i])
+        total_w += wait;
+        wait += parseInt(data['2-Burst_Time'][i]);
     }
-    data['5-Waiting_Time'] = times;
+    data['2A-Waiting_Time'] = times;
+    data['extras']['Average_Waiting_Time'] = total_w / rows;
 
-    // Creates a Gantt Chart
-    document.querySelector('#gantt-title').innerHTML = 'Gantt Chart:';
-    var gantt = '';
-    var sr = 6;
+    // Calculates Turn Around Time
+    times = [];
+    var ta, total_ta = 0;
     for (var i = 0; i < rows; i++) {
-        lc = Math.round(GANTT_SIZE * (parseInt(data['2-Burst_Time'][i]) / wait)) - sr;
-        for (var j = 0; j < lc; j++) {
-            gantt += '-';
-        }
-        gantt += ` |<b>${data['1-Process'][i]}</b> (${data['2-Burst_Time'][i]})| `;
+        ta = parseInt(data['2-Burst_Time'][i]) + parseInt(data['2A-Waiting_Time'][i]);
+        times.push(ta);
+        total_ta += ta;
     }
-    document.querySelector('#gantt').innerHTML = gantt;
+    data['2B-Turn_Around_Time'] = times;
+    data['extras']['Average_Turn_Around_Time'] = total_ta / rows;
+
+    // Creates a gantt chart accoding to the sorted data
+    create_chart(sort_data(
+        data['1-Process'],
+        data['2-Burst_Time'],
+        data['2A-Waiting_Time']));
+
     return data;
 }
 
+function sjf(data) {
+
+    console.log(data);
+    data['extras'] = {};
+    var dict = {};
+
+    if (!data['2B-Arrival_Time']) {
+        dict = sort_data(data['1-Process'],
+            data['2-Burst_Time'],
+            data['2-Burst_Time']);
+
+        data['1-Process'] = dict['value_name'];
+        data['2-Burst_Time'] = dict['duration'];
+        console.log(data);
+    }
+    
+    create_chart(dict);
+
+    // Calculates Waiting Time
+    var times = [];
+    var wait = 0;
+    var total_w = 0;
+    for (var i = 0; i < rows; i++) {
+        times.push(wait);
+        total_w += wait;
+        wait += parseInt(data['2-Burst_Time'][i]);
+    }
+    data['2A-Waiting_Time'] = times;
+    data['extras']['Average_Waiting_Time'] = total_w / rows;
+
+    // Calculates Turn Around Time
+    times = [];
+    var ta, total_ta = 0;
+    for (var i = 0; i < rows; i++) {
+        ta = parseInt(data['2-Burst_Time'][i]) + parseInt(data['2A-Waiting_Time'][i]);
+        times.push(ta);
+        total_ta += ta;
+    }
+    data['2B-Turn_Around_Time'] = times;
+    data['extras']['Average_Turn_Around_Time'] = total_ta / rows;
+
+
+    return data;
+}
 
 function not_yet_implemented(data) {
-    console.log('Function not found');
+    console.log('Function not yet implemented');
     document.querySelector('#error').innerHTML('Not yet implemented');
     return data;
 }
-
 
 // New Function
 function calculate_sum(data) {
     var sums = [];
     for (var i = 0; i < rows; i++) {
-        sums.push(parseInt(data['2-Burst_Time'][i]) + parseInt(data['3-Arrival_Time'][i]));
+        sums.push(parseInt(data['Column 1'][i]) + parseInt(data['Column 2'][i]));
     }
-    var row_name = 'Sum_of_Burst_time_and_Arrival_time';
+    var row_name = 'Sum of Column 1 and Column 2';
     data[row_name] = sums;
-    console.log(data[row_name]);
 
     return data;
 }
@@ -117,14 +172,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     })
 
-    // Loads Algorithm Selector
-    var option;
+    // Loads Algorithm Selectors
+    var option, algo = document.querySelector('#algo');
     for (key of Object.keys(ALGORITHMS)) {
         option = document.createElement('option');
         option.innerHTML = key;
         option.value = key;
-        document.querySelector('#algo').append(option);
+        algo.append(option);
     }
+    algo.onchange = () => {
+        print_head_options();
+    };
 
     // Sets form's onsubmit value to a function
     document.querySelector('#submit').onclick = () => {
@@ -135,13 +193,31 @@ document.addEventListener('DOMContentLoaded', () => {
     print_form();
 })
 
-
 function print_form() {
     rows = parseInt(document.querySelector('#rows').value);
     cols = parseInt(document.querySelector('#cols').value);
 
+    // Prints Head selectors
+    print_head_options();
+
+    // Table input fields
+    print_input_forms(rows, cols);
+}
+
+function print_head_options() {
+    cols = parseInt(document.querySelector('#cols').value);
+
     // Head selectors
-    var CV_copy = COLUMN_VALUES;
+    var CV_copy = [];
+
+    var key = document.querySelector('#algo').value;
+
+    if (ALGORITHMS[key]['columns']) {
+        for (key of ALGORITHMS[key]['columns']) {
+            CV_copy.push(key);
+        }
+    }
+
     var head = document.querySelector('#table-header');
     head.innerHTML = null;
     head.append(document.createElement('br'));
@@ -154,7 +230,7 @@ function print_form() {
         for (var j = 0; j < CV_copy.length; j++) {
             var item = document.createElement('option');
             item.value = CV_copy[j];
-            item.innerHTML = CV_copy[j].replace("_", " ").slice(2);
+            item.innerHTML = CV_copy[j].split('_').join(' ').replace(/[a-zA-Z1-9]+-/, '');
 
             // Just to make it look and feel nicer
             if (i === j) {
@@ -165,8 +241,9 @@ function print_form() {
         }
         head.append(select);
     }
+}
 
-    // Table input fields
+function print_input_forms(rows, cols) {
     var body = document.querySelector('#table-body');
     body.innerHTML = null;
     for (var i = 0; i < rows; i++) {
@@ -199,13 +276,10 @@ function submit_form() {
         let response = request.response;
         document.querySelector('.messages').innerHTML = null;
         if (!response['error']) {
-
-            // Removes the Gantt Chart if it exists
-            document.querySelector('#gantt-title').innerHTML = null;
-            document.querySelector('#gantt').innerHTML = null;
-            calculate_answer(response);
+            process_data(response);
         }
         else {
+            alert("Something went wrong");
             document.querySelector('#error').innerHTML = response['error'];
         }
     };
@@ -214,6 +288,42 @@ function submit_form() {
     request.send(new FormData(document.querySelector("#form")));
 }
 
+function create_chart(arrays) {
+
+    // Gantt Chart Title
+    document.querySelector('#gantt-title').innerHTML = "Gantt Chart:<br>";
+
+    // Creates the Gantt Chart
+    var lc = 0, current = 0;
+    var printed = false, start = true;
+    total = arrays['duration'].reduce((x, y) => { return x + y });
+    var gantt = document.querySelector('#gantt-title');
+    for (var i = 0; i < rows; i++) {
+        lc = Math.round(GANTT_SIZE * (arrays['duration'][i]) / total);
+
+        if (start) {
+            gantt.innerHTML += `| ${current} |`;
+            start = false;
+        }
+
+        if (lc < 1) {
+            gantt.innerHTML += ` <b>${arrays['value_name'][i]}</b> `;
+            printed = !printed;
+        }
+
+        for (var j = 0; j < lc; j++) {
+            if (j == Math.floor(lc / 2) && !printed) {
+                gantt.innerHTML += ` <b>${arrays['value_name'][i]}</b> `;
+                printed = !printed;
+            }
+            gantt.innerHTML += '-';
+        }
+
+        current += sorted['duration'][i];
+        gantt.innerHTML += `| ${current} |`;
+        printed = false;
+    }
+}
 
 // Creates the table for the answer
 function fill_table(data) {
@@ -227,9 +337,9 @@ function fill_table(data) {
     var head_row = document.createElement('tr');
 
     for (key of Object.keys(data)) {
+        if (key == 'extras') { continue }
         cell = document.createElement('td');
-        cell.innerHTML = key.split('_').join(" ");
-        cell.innerHTML = cell.innerHTML.replace(`${parseInt(cell.innerHTML)}-`, "");
+        cell.innerHTML = key.split('_').join(' ').replace(/[a-zA-Z1-9]+-/, "");
         head_row.append(cell);
     }
     table_head.append(head_row);
@@ -240,6 +350,7 @@ function fill_table(data) {
     for (var i = 0; i < rows; i++) {
         row = document.createElement('tr');
         for (key of Object.keys(data)) {
+            if (key == 'extras') { continue }
             cell = document.createElement('td');
             cell.innerHTML = data[key][i];
             row.append(cell);
@@ -249,42 +360,61 @@ function fill_table(data) {
     table.append(table_body);
 }
 
-
-/*/                                        ///
-        The actual calculator stuff
-///                                         /*/
-
-
-function calculate_answer(data) {
-
-    // If Arrival_Time column doesn't exist set all to 0
-    data = check_data(data);
-    if (!data) {
-        return console.log('Something went wrong');
+function print_extras(extras) {
+    var span;
+    var div = document.querySelector('#extras');
+    for (key of Object.keys(extras)) {
+        span = document.createElement('span');
+        span.className = 'extras';
+        span.innerHTML = `${key.split('_').join(' ')}: ${extras[key]}`;
+        div.append(span);
+        div.append(document.createElement('br'));
     }
-
-    // Calculations time
-    data = ALGORITHMS[document.querySelector('#algo').value]['function'](data);
-
-    // Logs data into the console and fills the table
-    console.log(data);
-    fill_table(data);
 }
 
 
-// Checks the fills the columns, checks for the required columns, and checks if the values are unique
+/*/                                        ///
+        Not-too front-end stuff
+///                                         /*/
+
+
+// The heart of the program
+function process_data(data) {
+
+    // Returns a console log if function returns nothing
+    data = check_data(data);
+    if (!data) {
+        return alert('Something went wrong');
+    }
+
+    // Removes the Gantt Chart and extras if they exist
+    document.querySelector('#gantt-title').innerHTML = null;
+    document.querySelector('#gantt').innerHTML = null;
+    document.querySelector('#extras').innerHTML = null;
+    // Calculations time
+
+    data = ALGORITHMS[document.querySelector('#algo').value]['function'](data);
+    // Fills the table and extras
+    
+    fill_table(data);
+    if (data['extras']) {
+        print_extras(data['extras']);
+    }
+}
+
+// Checks for the required columns, fills the columns, and checks if the values are unique
 function check_data(data) {
     var selected = document.querySelector('#algo').value;
     var error = document.querySelector('#error');
 
     if (ALGORITHMS[selected]['fill_columns']) {
-        for (fill_column of ALGORITHMS[selected]['fill_columns']) {
-            if (!data[fill_column]) {
+        for (key of Object.keys(ALGORITHMS[selected]['fill_columns'])) {
+            if (!data[key]) {
                 arr = [];
                 for (var i = 0; i < rows; i++) {
-                    arr.push(0)
+                    arr.push(ALGORITHMS[selected]['fill_columns'][key])
                 }
-                data[fill_column] = arr;
+                data[key] = arr;
             }
         }
     }
@@ -319,4 +449,29 @@ function check_data(data) {
     }
 
     return data;
+}
+
+function sort_data(value_name, duration, sort_by) {
+
+    // Sorts the Values
+    var values = [];
+    for (var i = 0; i < rows; i++) {
+        values.push([value_name[i], parseInt(duration[i]), parseInt(sort_by[i])]);
+    }
+    values = values.sort((a, b) => { return a[2] - b[2] });
+
+    // Creates an object to hold the sorted data
+    sorted = {
+        'value_name': [],
+        'duration': [],
+        'sort_by': []
+    }
+
+    for (value of values) {
+        sorted['value_name'].push(value[0]);
+        sorted['duration'].push(value[1]);
+        sorted['sort_by'].push(value[2]);
+    }
+
+    return sorted
 }
