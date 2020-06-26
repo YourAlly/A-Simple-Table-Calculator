@@ -22,12 +22,12 @@ const ALGORITHMS = {
     },
 
     // Example function
-    'SUM': { // Select option name
-        'function': calculate_sum, // Function to be used
-        'columns': ['Column 1', 'Column 2'], // Additional columns
-        'requirements': ['Column 1', 'Column 2'], // Required inputs
-        'fill_columns': { 'Column 3': Math.floor(Math.random() * 101) }, // Columns to be filled by value if not found
-        'unique': [] // Columns to have unique inputs
+    'SUM': {                                                                // Select option name
+        'function': calculate_sum,                                          // Function to be used
+        'columns': ['Column 1', 'Column 2'],                                // Additional columns
+        'requirements': ['Column 1', 'Column 2'],                           // Required inputs
+        'fill_columns': { 'Column 3': Math.floor(Math.random() * 101) },    // Columns to be filled by value if not found
+        'unique': []                                                        // Columns to have unique inputs
     }
 }
 
@@ -36,22 +36,29 @@ const ALGORITHMS = {
             Insert Functions Here
 ///                                     /*/
 
+
 // Completed
 function fcfs(data) {
     data['extras'] = {};
 
     // If arrival time exists
     if (data['2B-Arrival_Time']) {
-        dict = sort_data(data['1-Process'], data['2-Burst_Time'], data['2B-Arrival_Time']);
+        dict = sort_data(data['1-Process'],
+                    data['2-Burst_Time'],
+                    data['2B-Arrival_Time']);
+
         data['1-Process'] = dict['value_name'];
         data['2-Burst_Time'] = dict['duration'];
-        data['2B-Arrival_Time'] = data['2B-Arrival_Time'].sort();
+        data['2B-Arrival_Time'] = sort_data(data['1-Process'],
+                                    data['2B-Arrival_Time'],
+                                    data['2B-Arrival_Time'])
+                                    ['duration'];
     }
 
     // Calculates Waiting Time
-    var times = [];
-    var wait = 0;
-    var total_w = 0;
+    var times = [],
+        wait = 0,
+        total_w = 0;
     for (var i = 0; i < rows; i++) {
         times.push(wait);
         total_w += wait;
@@ -80,6 +87,7 @@ function fcfs(data) {
     return data;
 }
 
+
 function sjf(data) {
 
     console.log(data);
@@ -94,14 +102,17 @@ function sjf(data) {
         data['1-Process'] = dict['value_name'];
         data['2-Burst_Time'] = dict['duration'];
         console.log(data);
+    }else{
+        not_yet_implemented();
+        return none;
     }
 
     create_chart(dict);
 
     // Calculates Waiting Time
-    var times = [];
-    var wait = 0;
-    var total_w = 0;
+    var times = [],
+        wait = 0,
+        total_w = 0;
     for (var i = 0; i < rows; i++) {
         times.push(wait);
         total_w += wait;
@@ -125,15 +136,17 @@ function sjf(data) {
     return data;
 }
 
+
 function not_yet_implemented(data) {
     console.log('Function not yet implemented');
-    document.querySelector('#error').innerHTML('Not yet implemented');
+    document.querySelector('#error').innerHTML = 'Not yet implemented';
     return data;
 }
 
+
 // New Function
 function calculate_sum(data) {
-    var sums = [];
+    const sums = [];
     for (var i = 0; i < rows; i++) {
         sums.push(parseInt(data['Column 1'][i]) + parseInt(data['Column 2'][i]));
     }
@@ -141,4 +154,36 @@ function calculate_sum(data) {
     data[row_name] = sums;
 
     return data;
+}
+
+
+/*/                                     ///
+        Functions you might need
+///                                     /*/
+
+// Write the functions you'll need for your calculations here
+
+function sort_data(value_name, duration, sort_by) {
+
+    // Sorts the Values
+    var values = [];
+    for (var i = 0; i < rows; i++) {
+        values.push([value_name[i], parseInt(duration[i]), parseInt(sort_by[i])]);
+    }
+    values = values.sort((a, b) => { return a[2] - b[2] });
+
+    // Creates an object to hold the sorted data
+    sorted = {
+        'value_name': [],
+        'duration': [],
+        'sort_by': []
+    }
+
+    for (value of values) {
+        sorted['value_name'].push(value[0]);
+        sorted['duration'].push(value[1]);
+        sorted['sort_by'].push(value[2]);
+    }
+
+    return sorted
 }

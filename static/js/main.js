@@ -1,10 +1,6 @@
-/*/                                        ///
-        Less front-end stuff
-///                                         /*/
-
 // Submits the form via an XML Http request
 function submit_form() {
-    var request = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
 
     // Opens up a connection to the url (It's like opening a file)
     request.open("POST", "/submit");
@@ -12,7 +8,7 @@ function submit_form() {
 
     // Sets XML Http Request's onload value to a function
     request.onload = () => {
-        let response = request.response;
+        const response = request.response;
         document.querySelector('.messages').innerHTML = null;
         if (!response['error']) {
             process_data(response);
@@ -25,6 +21,7 @@ function submit_form() {
     // Sending the form data to server just to get a js object back
     request.send(new FormData(document.querySelector("#form")));
 }
+
 
 // The heart of the program
 function process_data(data) {
@@ -42,6 +39,9 @@ function process_data(data) {
 
     // Calculations time
     data = ALGORITHMS[document.querySelector('#algo').value]['function'](data);
+    if (!data) {
+        return alert('Something went wrong');
+    }
 
     // Fills the table and extras
     fill_table(data);
@@ -50,10 +50,13 @@ function process_data(data) {
     }
 }
 
+
 // Checks for the required columns, fills the columns, and checks if the values are unique
 function check_data(data) {
-    var selected = document.querySelector('#algo').value;
-    var error = document.querySelector('#error');
+    const selected = document.querySelector('#algo').value,
+        error = document.querySelector('#error');
+
+    var arr;
 
     if (ALGORITHMS[selected]['fill_columns']) {
         for (key of Object.keys(ALGORITHMS[selected]['fill_columns'])) {
@@ -84,7 +87,7 @@ function check_data(data) {
             }
 
             var set = new Set();
-            var arr = data[unique];
+            arr = data[unique];
 
             for (value of data[unique]) {
                 if (set.has(value)) {
@@ -96,29 +99,4 @@ function check_data(data) {
         }
     }
     return data;
-}
-
-function sort_data(value_name, duration, sort_by) {
-
-    // Sorts the Values
-    var values = [];
-    for (var i = 0; i < rows; i++) {
-        values.push([value_name[i], parseInt(duration[i]), parseInt(sort_by[i])]);
-    }
-    values = values.sort((a, b) => { return a[2] - b[2] });
-
-    // Creates an object to hold the sorted data
-    sorted = {
-        'value_name': [],
-        'duration': [],
-        'sort_by': []
-    }
-
-    for (value of values) {
-        sorted['value_name'].push(value[0]);
-        sorted['duration'].push(value[1]);
-        sorted['sort_by'].push(value[2]);
-    }
-
-    return sorted
 }

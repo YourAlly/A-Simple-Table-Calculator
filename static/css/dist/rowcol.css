@@ -2,10 +2,6 @@
   display: table;
 }
 
-#form #input-table #submit {
-  float: right;
-}
-
 #form #input-table #table-header {
   display: table-header-group;
 }
@@ -15,6 +11,10 @@
   margin-left: 0px;
   margin-right: 19px;
   margin-bottom: 5px;
+}
+
+#form #input-table #table-body {
+  display: table-row-group;
 }
 
 #form #input-table #table-body .input-area {

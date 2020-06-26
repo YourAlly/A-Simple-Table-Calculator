@@ -1,15 +1,10 @@
-/*/                                         ///
-            The front-end JavaScript
-///                                         /*/
-
-
 let rows, cols;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Loads the table size selectors
     document.querySelectorAll('.size').forEach((selector) => {
-        var max = parseInt(selector.dataset.max);
-        var min = parseInt(selector.dataset.min);
+        const max = parseInt(selector.dataset.max);
+        const min = parseInt(selector.dataset.min);
 
         // Fills it with the options available
         var item;
@@ -47,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     print_form();
 })
 
+
 function print_form() {
     rows = parseInt(document.querySelector('#rows').value);
     cols = parseInt(document.querySelector('#cols').value);
@@ -58,31 +54,31 @@ function print_form() {
     print_input_forms(rows, cols);
 }
 
+
 function print_head_options() {
     cols = parseInt(document.querySelector('#cols').value);
 
     // Head selectors
-    var CV_copy = [];
-
-    var key = document.querySelector('#algo').value;
-
-    if (ALGORITHMS[key]['columns']) {
-        for (key of ALGORITHMS[key]['columns']) {
+    const CV_copy = [],
+        algo = document.querySelector('#algo').value;
+    if (ALGORITHMS[algo]['columns']) {
+        for (key of ALGORITHMS[algo]['columns']) {
             CV_copy.push(key);
         }
     }
 
-    var head = document.querySelector('#table-header');
+    const head = document.querySelector('#table-header');
     head.innerHTML = null;
     head.append(document.createElement('br'));
 
+    var select, item;
     for (var i = 0; i < cols; i++) {
-        var select = document.createElement("select");
+        select = document.createElement("select");
         select.className = `select-area`;
         select.name = `col-header-${i + 1}`;
 
         for (var j = 0; j < CV_copy.length; j++) {
-            var item = document.createElement('option');
+            item = document.createElement('option');
             item.value = CV_copy[j];
             item.innerHTML = CV_copy[j].split('_').join(' ').replace(/[a-zA-Z1-9]+-/, '');
 
@@ -98,14 +94,15 @@ function print_head_options() {
 }
 
 function print_input_forms(rows, cols) {
-    var body = document.querySelector('#table-body');
+    const body = document.querySelector('#table-body');
     body.innerHTML = null;
+    var row, field;
     for (var i = 0; i < rows; i++) {
         row = document.createElement('div');
-        row.className = `row-${i + 1}`;
+        row.className = `row row-${i + 1}`;
 
         for (var j = 0; j < cols; j++) {
-            var field = document.createElement('input');
+            field = document.createElement('input');
             field.type = 'text';
             field.className = 'input-area';
             field.name = `col-${j + 1}`;
@@ -117,6 +114,7 @@ function print_input_forms(rows, cols) {
     body.append(document.createElement('br'));
 }
 
+
 function create_chart(arrays) {
 
     // Gantt Chart Title
@@ -124,10 +122,10 @@ function create_chart(arrays) {
 
     // Creates the Gantt Chart
     var lc = 0,
-        current = 0;
-    var printed = false,
-        start = true;
-    total = arrays['duration'].reduce((x, y) => { return x + y });
+        current = 0,
+        printed = false,
+        start = true,
+        total = arrays['duration'].reduce((x, y) => { return x + y });
     var gantt = document.querySelector('#gantt-title');
     for (var i = 0; i < rows; i++) {
         lc = Math.round(GANTT_SIZE * (arrays['duration'][i]) / total);
@@ -156,16 +154,17 @@ function create_chart(arrays) {
     }
 }
 
+
 // Creates the table for the answer
 function fill_table(data) {
     document.querySelector('#table-title').innerHTML = document.querySelector('#algo').value;
-    var table = document.querySelector('table');
+    const table = document.querySelector('table');
     table.innerHTML = null;
     var row, cell;
 
     // Table Header
-    var table_head = document.createElement('thead');
-    var head_row = document.createElement('tr');
+    var table_head = document.createElement('thead'),
+        head_row = document.createElement('tr');
 
     for (key of Object.keys(data)) {
         if (key == 'extras') { continue }
@@ -192,8 +191,8 @@ function fill_table(data) {
 }
 
 function print_extras(extras) {
+    const div = document.querySelector('#extras');
     var span;
-    var div = document.querySelector('#extras');
     for (key of Object.keys(extras)) {
         span = document.createElement('span');
         span.className = 'extras';
