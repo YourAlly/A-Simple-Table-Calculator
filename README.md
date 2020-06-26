@@ -52,7 +52,7 @@ One can easily (I think) add new algorithms to be calculated (of course, a littl
 
 And add the function to the object by first naming the inserting an object with a name of your own choice with the 'function' key containing a function as it's value, along with the new column values they need.
 
-   // Object that holds the functions
+    // Object that holds the functions
     const ALGORITHMS = {
         'FCFS': {
             'function': fcfs,
