@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}" />
 
-		<script src="{{ url_for('static', filename='calculator.js') }}"></script>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/rowcol.css') }}" />
 
-		<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <script src="{{ url_for('static', filename='calculator.js') }}"></script>
 
-		<title>
-			Calculator
-		</title>
-	</head>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
-	<body>
-		<form id="form">
-			<label for="rows">Rows</label>
-			<select name="rows" id="rows" class="size selector" data-min="2" data-max="10">
-				<!-- To be filled by JavaScript --></select
-			>
-			<label for="cols">Columns</label>
-			<select name="cols" id="cols" class="size selector" data-min="2" data-max="4">
-				<!-- To be filled by JavaScript --></select
-			>
-			<label for="cols">Algorithm</label>
-			<select name="algorithm" id="algo" class="selector">
-				<!-- To be filled by JavaScript --></select
-			>
+    <title>
+        Calculator
+    </title>
+</head>
 
-			<div id="input-table">
-				<div id="table-header">
-					<!-- print_form() -->
-				</div>
+<body>
+    <form id="form">
+        <label for="rows">Rows</label>
+        <select name="rows" id="rows" class="size selector" data-min="2" data-max="10">
+			<!-- To be filled by JavaScript --></select>
+        <label for="cols">Columns</label>
+        <select name="cols" id="cols" class="size selector" data-min="2" data-max="4">
+			<!-- To be filled by JavaScript --></select>
+        <label for="cols">Algorithm</label>
+        <select name="algorithm" id="algo" class="selector">
+			<!-- To be filled by JavaScript --></select>
 
-				<div id="table-body">
-					<!-- print_form() -->
-				</div>
-			</div>
-		</form>
-		<button id="submit">Submit</button>
+        <div id="input-table">
+            <div id="table-header">
+                <!-- print_form() -->
+            </div>
 
-		<span id="error" class="messages"></span>
-		<h3 id="table-title"></h3>
-		<h3 id="gantt-title"></h3>
-		<div id="gantt">
-			<!-- Again, JavaScript -->
-		</div>
+            <div id="table-body">
+                <!-- print_form() -->
+            </div>
+        </div>
+    </form>
+    <button id="submit">Submit</button>
 
-		<table>
-			<!-- fill_table(data) -->
-		</table>
-		<br />
-		<div id="extras"></div>
-	</body>
+    <span id="error" class="messages"></span>
+    <h3 id="table-title"></h3>
+    <h3 id="gantt-title"></h3>
+    <div id="gantt">
+        <!-- Again, JavaScript -->
+    </div>
+
+    <table>
+        <!-- fill_table(data) -->
+    </table>
+    <br />
+    <div id="extras"></div>
+</body>
+
 </html>
