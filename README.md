@@ -1,5 +1,7 @@
 # A Simple Table Calculator
 
+<a href="https://www.youtube.com/watch?v=uL7IWo1HiI8">Youtube Link</a>
+
 ## News
 
 Apparently the resources I found internet are different compared to the ones that were taught to us so I'll wait for further information regarding the algorithms before continuing.
